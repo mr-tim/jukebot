@@ -2,7 +2,7 @@
   <div class="search">
     <b-card style="margin-bottom: 20px">
       <b-input-group left="Search">
-        <b-form-input type="search"/>
+        <b-form-input type="search" @input="search($event)"/>
       </b-input-group>
     </b-card>
 
@@ -16,29 +16,21 @@
 </template>
 
 <script>
-function simplify (result) {
-  return {
-    'image300': result.album.images[1].url,
-    'image64': result.album.images[2].url,
-    'title': result.name,
-    'artist': result.artists.map(a => a.name).join(', '),
-    'uri': result.uri
-  }
-}
-
-const searchResults = require('../../search-tim.json').tracks.items.map(simplify)
+import { mapState } from 'vuex'
 
 import SearchResult from './SearchResult.vue'
 
 export default {
   name: 'search',
+  computed: mapState([
+    'searchResults'
+  ]),
   components: {
     SearchResult
   },
-  data () {
-    console.log(searchResults)
-    return {
-      searchResults
+  methods: {
+    search (term) {
+      this.$store.dispatch('LOAD_SEARCH_RESULTS', term)
     }
   }
 }

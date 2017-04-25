@@ -24,5 +24,6 @@ export default {
   margin-right: auto;
   max-width: 300px;
   margin-bottom: 10px;
+  min-height: 370px;
 }
 </style>
