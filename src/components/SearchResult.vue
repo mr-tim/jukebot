@@ -18,7 +18,7 @@ export default {
   },
   methods: {
     enqueueTrack (result) {
-      this.$store.dispatch('ENQUEUE', { track: result })
+      this.$store.dispatch('ENQUEUE', result)
     }
   }
 }
