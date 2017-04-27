@@ -37,7 +37,7 @@ const store = new Vuex.Store({
     },
 
     'ENQUEUE': function (context, track) {
-      axios.post('/enqueue', { spotifyUri: track.uri })
+      axios.post('/api/enqueue', { spotifyUri: track.uri })
         .then((response) => {
           context.commit('SET_ENQUEUED', { track: track })
         })
