@@ -11,7 +11,7 @@ server.use(morgan('tiny'))
 
 server.post('/api/enqueue', (req, res) => {
   const track = req.body
-  console.log(`Track: ${JSON.stringify(track)}`)
+  console.log(`Request to enqueue track: ${JSON.stringify(track)}`)
   res.status(201).json({'status': 'ok'})
 });
 
