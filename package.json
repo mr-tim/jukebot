@@ -19,6 +19,7 @@
     "bootstrap-vue": "^0.14.0",
     "express": "^4.15.2",
     "morgan": "^1.8.1",
+    "sonos-discovery": "git+https://github.com/jishi/node-sonos-discovery.git",
     "vue": "^2.2.6",
     "vue-router": "^2.3.1",
     "vuex": "^2.3.1"
