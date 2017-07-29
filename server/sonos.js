@@ -158,7 +158,7 @@ function getSpotifyMetadata(uri, serviceType) {
 }
 
 discovery.on('transport-state', (player) => {
-  if (player.roomName === 'Dining Room') {
+  if (player.roomName === 'Kitchen') {
     // console.log('Transport state change: ' + JSON.stringify(player, null, 2))
     // console.log()
 
