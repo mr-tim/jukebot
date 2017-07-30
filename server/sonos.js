@@ -60,48 +60,11 @@ const trackUris = [
   "spotify:track:4OsZ1vrenrtSbqLJxOceKl"
 ];
 
-// var country = '';
-// var accountId = '';
-// var accountSN = '';
-// var searchType = 0;
-//
-// const request = require('request-promise');
-//
-// function getAccountId(player, service)
-// {
-//   accountId = '';
-//
-//   if (service != 'library') {
-//     return request({url: player.baseUrl + '/status/accounts',json: false})
-//       .then((res) => {
-//         console.log(`Response: ${res}`)
-//         var actLoc = res.indexOf(player.system.getServiceType(service));
-//
-//         if (actLoc != -1) {
-//           var idLoc = res.indexOf('<UN>', actLoc)+4;
-//           var snLoc = res.indexOf('SerialNum="', actLoc)+11;
-//
-//           accountId = res.substring(idLoc,res.indexOf('</UN>',idLoc));
-//           console.log(`accountId: ${accountId}`)
-//           accountSN = res.substring(snLoc,res.indexOf('"',snLoc));
-//           console.log(`accountSn: ${accountSN}`)
-//         }
-//
-//         return Promise.resolve();
-//       });
-//
-//     return promise;
-//   } else {
-//     return Promise.resolve();
-//   }
-// }
-
 const pg = require('pg')
 const connectionString = process.env.DATABASE_URL || 'postgres://localhost:5432/jukebot'
 const pool = new pg.Pool({connectionString: connectionString})
 
 function fetchAndQueueNextTrack (player) {
-  // getAccountId(player, 'Spotify')
   addingToQueue = true
   pool.query('select id, request_time, spotify_uri from queued_tracks where queued = false order by request_time asc limit 1')
   .then((res) => {
@@ -129,12 +92,9 @@ function queueTrack(player, spotifyUri) {
   console.log(`Next track: ${spotifyUri}`)
   const encodedSpotifyUri = encodeURIComponent(spotifyUri);
   const serviceType = player.system.getServiceType('Spotify')
-  console.log(`Service type: ${serviceType}`)
   const sid = player.system.getServiceId('Spotify')
   const uri = `x-sonos-spotify:${encodedSpotifyUri}?sid=${sid}&flags=0&sn=1`;
-  console.log(`Spotify sid: ${sid}`)
   const metadata = getSpotifyMetadata(encodedSpotifyUri, serviceType)
-  console.log(`Track metadata: ${metadata}`)
   return player.coordinator.addURIToQueue(uri, metadata)
 }
 
