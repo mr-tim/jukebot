@@ -98,37 +98,31 @@ const trackUris = [
 
 const pg = require('pg')
 const connectionString = process.env.DATABASE_URL || 'postgres://localhost:5432/jukebot'
-const client = new pg.Client(connectionString)
+const pool = new pg.Pool({connectionString: connectionString})
 
 function fetchAndQueueNextTrack (player) {
   // getAccountId(player, 'Spotify')
   addingToQueue = true
-  pg.connect(connectionString, (err, client, done) => {
-    const query = client.query('select id, request_time, spotify_uri from queued_tracks where queued = false order by request_time asc limit 1')
-    var result = undefined;
-    query.on('row', function (row) {
-      result = row;
-    })
-    query.on('end', function () {
-      if (result !== undefined) {
-        const spotifyUri = result.spotify_uri
-        const delQueue = client.query('update queued_tracks set queued = true where id = $1', [result.id])
-        queueTrack(player, spotifyUri).then(() => {
-          console.log('Next track queued successfully!')
-          addingToQueue = false
-        })
-      }
-      else {
-        const spotifyUri = trackUris[currentIndex]
-        currentIndex = (currentIndex + 1) % trackUris.length
-        queueTrack(player, spotifyUri).then(() => {
-          console.log('Next track queued successfully!')
-          addingToQueue = false
-        })
-      }
-    })
+  pool.query('select id, request_time, spotify_uri from queued_tracks where queued = false order by request_time asc limit 1')
+  .then((res) => {
+    result = res.rows[0]
+    if (result !== undefined) {
+      const spotifyUri = result.spotify_uri
+      const delQueue = pool.query({text: 'update queued_tracks set queued = true where id = $1', values: [result.id]})
+      queueTrack(player, spotifyUri).then(() => {
+        console.log('Next track queued successfully!')
+        addingToQueue = false
+      })
+    }
+    else {
+      const spotifyUri = trackUris[currentIndex]
+      currentIndex = (currentIndex + 1) % trackUris.length
+      queueTrack(player, spotifyUri).then(() => {
+        console.log('Next track queued successfully!')
+        addingToQueue = false
+      })
+    }
   })
-
 }
 
 function queueTrack(player, spotifyUri) {

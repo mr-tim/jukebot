@@ -26,7 +26,7 @@ const store = new Vuex.Store({
       if (searchTerm.length === 0) {
         context.commit('SET_SEARCH_RESULTS', { searchResults: [] })
       } else {
-        axios.get('https://api.spotify.com/v1/search?type=track&market=GB&q=' + searchTerm)
+        axios.get('/api/search?q=' + encodeURI(searchTerm))
         .then((response) => {
           var results = response.data.tracks.items.map(simplifySearchResult)
           context.commit('SET_SEARCH_RESULTS', { searchResults: results })

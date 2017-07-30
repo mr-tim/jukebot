@@ -13,6 +13,8 @@
     "express": "^4.15.3",
     "morgan": "^1.8.2",
     "pg": "^7.0.2",
-    "sonos-discovery": "git+https://github.com/jishi/node-sonos-discovery.git"
+    "restler": "^3.4.0",
+    "sonos-discovery": "git+https://github.com/jishi/node-sonos-discovery.git",
+    "spotify-web-api-node": "^2.4.0"
   }
 }

@@ -28,7 +28,7 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/api/enqueue': {
+      '/api/*': {
         target: 'http://localhost:3000/',
         changeOrigin: true
       }
